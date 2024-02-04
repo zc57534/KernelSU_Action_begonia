@@ -40,8 +40,8 @@ jobs:
     - name: Download Clang Toolchain
       run: |
         mkdir clang
-        wget https://github.com/ZyCromerZ/Clang/releases/download/11.1.0-20220724-release/Clang-11.1.0-20220724.tar.gz
-        tar -C clang/ -zxvf Clang-11.1.0-20220724.tar.gz
+        wget https://android.googlesource.com/platform//prebuilts/clang/host/linux-x86/+archive/3857008389202edac32d57008bb8c99d2c957f9d/clang-r383902.tar.gz
+        tar -C clang/ -zxvf clang-r383902.tar.gz
 
     - name: Download mkbootimg tools
       if: env.MAKE_BOOT_IMAGE == 'true'
@@ -109,7 +109,7 @@ jobs:
         export ARCH=${{ env.TARGET_ARCH }}
         export SUBARCH=${{ env.TARGET_ARCH }}
         export KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
-        export KBUILD_BUILD_HOST=GitHub-Action
+        export KBUILD_BUILD_HOST=WuxinBuilds
         export KBUILD_BUILD_USER=$(echo ${{ github.actor }} | tr A-Z a-z)
         make -j$(nproc --all) O=out ARCH=arm64 savedefconfig
         cp -f out/defconfig arch/${{ env.TARGET_ARCH }}/configs/${{ env.KERNEL_DEFCONFIG }}
